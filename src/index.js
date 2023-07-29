@@ -4,16 +4,16 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"
 
 const gallery = document.querySelector('.gallery')
-const btnEl = document.querySelector('.load-more')
+const loadBtn = document.querySelector('.load-more')
 const formEl = document.querySelector('.search-form')
 
 const lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: '250' });
 
-btnEl.style.display = 'none';
+loadBtn.style.display = 'none';
 
 
 formEl.addEventListener('submit', onSubmit)
-btnEl.addEventListener('click', onLoad)
+loadBtn.addEventListener('click', onLoad)
 
 let iD = ''
 let page = 1
@@ -27,13 +27,13 @@ async function onSubmit  (evt) {
     await fetchPhoto(iD)
       .then((array) => {
           if (array.length === 0) {
-              btnEl.style.display = 'none';
+              loadBtn.style.display = 'none';
           Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.")
         } else {
           Notiflix.Notify.info(`Hooray! We found ${totalPhoto} images.`) 
           gallery.insertAdjacentHTML('beforeend', createMarkup(array))
           lightbox.refresh()
-              btnEl.style.display = 'block';
+              loadBtn.style.display = 'block';
         }
       })
     } catch (error) {
@@ -53,7 +53,7 @@ async function onLoad(evt) {
           smoothScrolling()
         })
     } else {
-      btnEl.hidden = true
+      loadBtn.hidden = true
       Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
     }
   } catch (error) {
