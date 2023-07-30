@@ -9,9 +9,6 @@ const formEl = document.querySelector('.search-form')
 
 const lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: '250' });
 
-loadBtn.style.display = 'none';
-
-
 formEl.addEventListener('submit', onSubmit)
 loadBtn.addEventListener('click', onLoad)
 
@@ -19,26 +16,27 @@ let iD = ''
 let page = 1
 let totalPhoto = 0
 
-async function onSubmit  (evt) {
-  evt.preventDefault() 
+async function onSubmit(evt) {
+    loadBtn.style.visibility = `hidden`;
+    evt.preventDefault() 
   gallery.innerHTML = ''
     iD = evt.currentTarget[0].value
    try {
     await fetchPhoto(iD)
       .then((array) => {
           if (array.length === 0) {
-              loadBtn.style.display = 'none';
+              loadBtn.style.visibility = `hidden`;
           Notiflix.Notify.info("Sorry, there are no images matching your search query. Please try again.")
         } else {
           Notiflix.Notify.info(`Hooray! We found ${totalPhoto} images.`) 
           gallery.insertAdjacentHTML('beforeend', createMarkup(array))
-          lightbox.refresh()
-              loadBtn.style.display = 'block';
+              lightbox.refresh()
+              loadBtn.style.visibility = `visible`;
         }
       })
     } catch (error) {
           console.log(error.message)
-  }
+    }
 }
   
 
@@ -53,7 +51,7 @@ async function onLoad(evt) {
           smoothScrolling()
         })
     } else {
-      loadBtn.hidden = true
+        loadBtn.style.visibility = `hidden`;
       Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
     }
   } catch (error) {
